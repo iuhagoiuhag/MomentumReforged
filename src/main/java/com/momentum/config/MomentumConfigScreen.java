@@ -1,9 +1,9 @@
 package com.momentum.config;
 
 import com.momentum.Momentum;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -12,12 +12,15 @@ public class MomentumConfigScreen extends Screen {
     private final MomentumConfig config;
 
     private boolean enabled;
-    private boolean bhopEnabled;
     private boolean autoBhop;
-    private boolean showSpeedHud;
-    private boolean showMaxSpeed;
     private double airSpeedCap;
+    private double airAcceleration;
     private double groundSpeedCap;
+    private double groundAcceleration;
+    private double friction;
+    private double gravity;
+    private double jumpVelocity;
+    private double stopSpeed;
 
     public MomentumConfigScreen(Screen parent) {
         super(Component.literal("Momentum Settings"));
@@ -28,82 +31,147 @@ public class MomentumConfigScreen extends Screen {
     @Override
     protected void init() {
         enabled = config.isEnabled();
-        bhopEnabled = config.isBhopEnabled();
         autoBhop = config.isAutoBhop();
-        showSpeedHud = config.isShowSpeedHud();
-        showMaxSpeed = config.isShowMaxSpeed();
         airSpeedCap = config.getAirSpeedCap();
+        airAcceleration = config.getAirAcceleration();
         groundSpeedCap = config.getGroundSpeedCap();
+        groundAcceleration = config.getGroundAcceleration();
+        friction = config.getFriction();
+        gravity = config.getGravity();
+        jumpVelocity = config.getJumpVelocity();
+        stopSpeed = config.getStopSpeed();
 
-        int centerX = this.width / 2;
-        int startY = 40;
-        int rowHeight = 24;
+        int cx = this.width / 2;
+        int rh = 22;
+
+        // Toggles row
+        int toggleY = 35;
+        int toggleW = 100;
+        int gap = 8;
+        int totalToggleW = toggleW * 2 + gap;
+        int toggleStartX = cx - totalToggleW / 2;
+
+        addToggle(toggleStartX, toggleY, toggleW, "Enabled", () -> enabled,
+            "Toggles all Momentum physics on/off", v -> enabled = v);
+        addToggle(toggleStartX + toggleW + gap, toggleY, toggleW, "Auto-Bhop", () -> autoBhop,
+            "Automatically re-jumps when holding space", v -> autoBhop = v);
+
+        // Physics values - two columns
+        int colW = 150;
+        int colGap = 10;
+        int col1X = cx - colW - colGap / 2;
+        int col2X = cx + colGap / 2;
+        int physStartY = 68;
+
+        addCycle(col1X, physStartY, colW, "Air Speed Cap", () -> airSpeedCap,
+            "Maximum horizontal speed while airborne (blocks/sec)",
+            new double[]{6, 8, 10, 12, 14, 16, 18, 20}, v -> airSpeedCap = v);
+        addCycle(col1X, physStartY + rh, colW, "Air Accel", () -> airAcceleration,
+            "Acceleration rate while in the air",
+            new double[]{1, 2, 3, 4, 5, 6, 8, 10}, v -> airAcceleration = v);
+        addCycle(col1X, physStartY + rh * 2, colW, "Ground Speed", () -> groundSpeedCap,
+            "Maximum speed while on the ground (blocks/sec)",
+            new double[]{2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10},
+            v -> groundSpeedCap = v);
+        addCycle(col1X, physStartY + rh * 3, colW, "Ground Accel", () -> groundAcceleration,
+            "Acceleration rate while on the ground",
+            new double[]{2, 4, 6, 8, 10, 12, 14, 16, 18, 20}, v -> groundAcceleration = v);
+
+        addCycle(col2X, physStartY, colW, "Friction", () -> friction,
+            "Ground friction applied when moving",
+            new double[]{0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6},
+            v -> friction = v);
+        addCycle(col2X, physStartY + rh, colW, "Gravity", () -> gravity,
+            "Gravity acceleration (blocks/sec\u00B2)",
+            new double[]{8, 12, 16, 20, 24, 28, 32, 36, 40},
+            v -> gravity = v);
+        addCycle(col2X, physStartY + rh * 2, colW, "Jump Vel", () -> jumpVelocity,
+            "Initial jump velocity (blocks/sec)",
+            new double[]{5, 6, 7, 8, 8.4, 9, 10, 11, 12},
+            v -> jumpVelocity = v);
+        addCycle(col2X, physStartY + rh * 3, colW, "Stop Speed", () -> stopSpeed,
+            "Speed threshold below which the player stops completely",
+            new double[]{0.5, 1, 1.5, 2, 2.5, 3},
+            v -> stopSpeed = v);
+
+        // Bottom buttons
+        int bottomY = physStartY + rh * 4 + 12;
 
         this.addRenderableWidget(
-            Button.builder(Component.literal("Enabled: " + (enabled ? "ON" : "OFF")), button -> {
-                enabled = !enabled;
-                button.setMessage(Component.literal("Enabled: " + (enabled ? "ON" : "OFF")));
-            }).bounds(centerX - 100, startY, 200, 20).build()
-        );
-
-        this.addRenderableWidget(
-            Button.builder(Component.literal("Bhop: " + (bhopEnabled ? "ON" : "OFF")), button -> {
-                bhopEnabled = !bhopEnabled;
-                button.setMessage(Component.literal("Bhop: " + (bhopEnabled ? "ON" : "OFF")));
-            }).bounds(centerX - 100, startY + rowHeight, 200, 20).build()
-        );
-
-        this.addRenderableWidget(
-            Button.builder(Component.literal("Auto-Bhop: " + (autoBhop ? "ON" : "OFF")), button -> {
-                autoBhop = !autoBhop;
-                button.setMessage(Component.literal("Auto-Bhop: " + (autoBhop ? "ON" : "OFF")));
-            }).bounds(centerX - 100, startY + rowHeight * 2, 200, 20).build()
-        );
-
-        this.addRenderableWidget(
-            Button.builder(Component.literal("Speed HUD: " + (showSpeedHud ? "ON" : "OFF")), button -> {
-                showSpeedHud = !showSpeedHud;
-                button.setMessage(Component.literal("Speed HUD: " + (showSpeedHud ? "ON" : "OFF")));
-            }).bounds(centerX - 100, startY + rowHeight * 3, 200, 20).build()
-        );
-
-        this.addRenderableWidget(
-            Button.builder(Component.literal("Show Max Speed: " + (showMaxSpeed ? "ON" : "OFF")), button -> {
-                showMaxSpeed = !showMaxSpeed;
-                button.setMessage(Component.literal("Show Max Speed: " + (showMaxSpeed ? "ON" : "OFF")));
-            }).bounds(centerX - 100, startY + rowHeight * 4, 200, 20).build()
-        );
-
-        this.addRenderableWidget(
-            Button.builder(Component.literal("Air Speed Cap: " + String.format("%.1f", airSpeedCap)), button -> {
-                airSpeedCap = airSpeedCap >= 50.0 ? 10.0 : airSpeedCap + 5.0;
-                button.setMessage(Component.literal("Air Speed Cap: " + String.format("%.1f", airSpeedCap)));
-            }).bounds(centerX - 100, startY + rowHeight * 5, 200, 20).build()
-        );
-
-        this.addRenderableWidget(
-            Button.builder(Component.literal("Ground Speed Cap: " + String.format("%.1f", groundSpeedCap)), button -> {
-                groundSpeedCap = groundSpeedCap >= 10.0 ? 2.0 : groundSpeedCap + 0.5;
-                button.setMessage(Component.literal("Ground Speed Cap: " + String.format("%.1f", groundSpeedCap)));
-            }).bounds(centerX - 100, startY + rowHeight * 6, 200, 20).build()
+            Button.builder(Component.literal("Reset to Defaults"), button -> {
+                MomentumConfig defaults = new MomentumConfig();
+                enabled = defaults.isEnabled();
+                autoBhop = defaults.isAutoBhop();
+                airSpeedCap = defaults.getAirSpeedCap();
+                airAcceleration = defaults.getAirAcceleration();
+                groundSpeedCap = defaults.getGroundSpeedCap();
+                groundAcceleration = defaults.getGroundAcceleration();
+                friction = defaults.getFriction();
+                gravity = defaults.getGravity();
+                jumpVelocity = defaults.getJumpVelocity();
+                stopSpeed = defaults.getStopSpeed();
+                this.rebuildWidgets();
+            }).tooltip(Tooltip.create(Component.literal("Resets all settings to their default values")))
+                .bounds(cx - 155, bottomY, 145, 20).build()
         );
 
         this.addRenderableWidget(
             Button.builder(Component.literal("Save & Close"), button -> {
                 save();
                 this.minecraft.gui.setScreen(parent);
-            }).bounds(centerX - 100, startY + rowHeight * 7 + 10, 200, 20).build()
+            }).tooltip(Tooltip.create(Component.literal("Saves changes and returns to the previous screen")))
+                .bounds(cx + 10, bottomY, 145, 20).build()
         );
+    }
+
+    private void addToggle(int x, int y, int w, String label,
+                           java.util.function.Supplier<Boolean> getter,
+                           String tooltip, java.util.function.Consumer<Boolean> setter) {
+        this.addRenderableWidget(
+            Button.builder(Component.literal(label + ": " + (getter.get() ? "ON" : "OFF")), button -> {
+                boolean next = !getter.get();
+                setter.accept(next);
+                button.setMessage(Component.literal(label + ": " + (next ? "ON" : "OFF")));
+            }).tooltip(Tooltip.create(Component.literal(tooltip)))
+                .bounds(x, y, w, 20).build()
+        );
+    }
+
+    private void addCycle(int x, int y, int w, String label,
+                          java.util.function.Supplier<Double> getter,
+                          String tooltip, double[] values,
+                          java.util.function.Consumer<Double> setter) {
+        this.addRenderableWidget(
+            Button.builder(
+                Component.literal(label + ": " + String.format("%.1f", getter.get())), button -> {
+                    double next = cycleValue(getter.get(), values);
+                    setter.accept(next);
+                    button.setMessage(Component.literal(label + ": " + String.format("%.1f", next)));
+                }).tooltip(Tooltip.create(Component.literal(tooltip)))
+                .bounds(x, y, w, 20).build()
+        );
+    }
+
+    private static double cycleValue(double current, double[] values) {
+        for (int i = 0; i < values.length; i++) {
+            if (Math.abs(values[i] - current) < 0.01) {
+                return values[(i + 1) % values.length];
+            }
+        }
+        return values[0];
     }
 
     private void save() {
         config.setEnabled(enabled);
-        config.setBhopEnabled(bhopEnabled);
         config.setAutoBhop(autoBhop);
-        config.setShowSpeedHud(showSpeedHud);
-        config.setShowMaxSpeed(showMaxSpeed);
         config.setAirSpeedCap(airSpeedCap);
+        config.setAirAcceleration(airAcceleration);
         config.setGroundSpeedCap(groundSpeedCap);
+        config.setGroundAcceleration(groundAcceleration);
+        config.setFriction(friction);
+        config.setGravity(gravity);
+        config.setJumpVelocity(jumpVelocity);
+        config.setStopSpeed(stopSpeed);
         config.save();
         Momentum.LOGGER.info("Momentum config saved");
     }
@@ -111,7 +179,9 @@ public class MomentumConfigScreen extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float delta) {
         super.extractRenderState(graphics, mouseX, mouseY, delta);
+        String version = "v" + config.getVersion();
         graphics.centeredText(this.font, this.title, this.width / 2, 15, 0xFFFFFF);
+        graphics.text(this.font, version, this.width - this.font.width(version) - 5, 5, 0x888888, true);
     }
 
     @Override

@@ -11,7 +11,6 @@ public class SpeedHudRenderer {
 
     public static void render(GuiGraphicsExtractor graphics) {
         MomentumConfig config = Momentum.getConfig();
-        if (!config.isShowSpeedHud()) return;
 
         LocalPlayer player = client.player;
         if (player == null) return;
@@ -32,13 +31,6 @@ public class SpeedHudRenderer {
         y += 12;
         String verticalText = String.format("Vertical: %.2f", verticalSpeed * 20);
         graphics.text(client.font, verticalText, x, y, 0xAAAAFF, true);
-
-        if (config.isShowMaxSpeed()) {
-            y += 12;
-            double maxSpeed = horizontalSpeed * 20;
-            String maxText = String.format("Max: %.2f", maxSpeed);
-            graphics.text(client.font, maxText, x, y, 0xFFAA00, true);
-        }
 
         y += 12;
         String bhoppingText = player.onGround() ? "Ground" : "Air";

@@ -18,18 +18,14 @@ public class MomentumConfig {
     private boolean bhopEnabled = true;
     private boolean autoBhop = false;
 
-    private double groundSpeedCap = 4.4;
-    private double airSpeedCap = 30.0;
-    private double airAcceleration = 12.0;
-    private double groundAcceleration = 5.6;
+    private double groundSpeedCap = 5.5;
+    private double airSpeedCap = 12.0;
+    private double airAcceleration = 3.0;
+    private double groundAcceleration = 8.0;
     private double friction = 4.0;
-    private double gravity = 20.0;
-    private double jumpVelocity = 8.42;
+    private double gravity = 32.0;
+    private double jumpVelocity = 8.4;
     private double stopSpeed = 1.0;
-    private double surfaceFriction = 1.0;
-
-    private boolean showSpeedHud = true;
-    private boolean showMaxSpeed = true;
     private int hudX = 10;
     private int hudY = 10;
 
@@ -119,30 +115,6 @@ public class MomentumConfig {
 
     public void setStopSpeed(double stopSpeed) {
         this.stopSpeed = stopSpeed;
-    }
-
-    public double getSurfaceFriction() {
-        return surfaceFriction;
-    }
-
-    public void setSurfaceFriction(double surfaceFriction) {
-        this.surfaceFriction = surfaceFriction;
-    }
-
-    public boolean isShowSpeedHud() {
-        return showSpeedHud;
-    }
-
-    public void setShowSpeedHud(boolean showSpeedHud) {
-        this.showSpeedHud = showSpeedHud;
-    }
-
-    public boolean isShowMaxSpeed() {
-        return showMaxSpeed;
-    }
-
-    public void setShowMaxSpeed(boolean showMaxSpeed) {
-        this.showMaxSpeed = showMaxSpeed;
     }
 
     public int getHudX() {
