@@ -1,0 +1,188 @@
+package com.momentum.config;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.momentum.Momentum;
+import net.fabricmc.loader.api.FabricLoader;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+public class MomentumConfig {
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final Path CONFIG_PATH = FabricLoader.getInstance()
+            .getConfigDir().resolve("momentum.json");
+
+    private boolean enabled = true;
+    private boolean bhopEnabled = true;
+    private boolean autoBhop = false;
+
+    private double groundSpeedCap = 4.4;
+    private double airSpeedCap = 30.0;
+    private double airAcceleration = 12.0;
+    private double groundAcceleration = 5.6;
+    private double friction = 4.0;
+    private double gravity = 20.0;
+    private double jumpVelocity = 8.42;
+    private double stopSpeed = 1.0;
+    private double surfaceFriction = 1.0;
+
+    private boolean showSpeedHud = true;
+    private boolean showMaxSpeed = true;
+    private int hudX = 10;
+    private int hudY = 10;
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public boolean isBhopEnabled() {
+        return bhopEnabled;
+    }
+
+    public void setBhopEnabled(boolean bhopEnabled) {
+        this.bhopEnabled = bhopEnabled;
+    }
+
+    public boolean isAutoBhop() {
+        return autoBhop;
+    }
+
+    public void setAutoBhop(boolean autoBhop) {
+        this.autoBhop = autoBhop;
+    }
+
+    public double getGroundSpeedCap() {
+        return groundSpeedCap;
+    }
+
+    public void setGroundSpeedCap(double groundSpeedCap) {
+        this.groundSpeedCap = groundSpeedCap;
+    }
+
+    public double getAirSpeedCap() {
+        return airSpeedCap;
+    }
+
+    public void setAirSpeedCap(double airSpeedCap) {
+        this.airSpeedCap = airSpeedCap;
+    }
+
+    public double getAirAcceleration() {
+        return airAcceleration;
+    }
+
+    public void setAirAcceleration(double airAcceleration) {
+        this.airAcceleration = airAcceleration;
+    }
+
+    public double getGroundAcceleration() {
+        return groundAcceleration;
+    }
+
+    public void setGroundAcceleration(double groundAcceleration) {
+        this.groundAcceleration = groundAcceleration;
+    }
+
+    public double getFriction() {
+        return friction;
+    }
+
+    public void setFriction(double friction) {
+        this.friction = friction;
+    }
+
+    public double getGravity() {
+        return gravity;
+    }
+
+    public void setGravity(double gravity) {
+        this.gravity = gravity;
+    }
+
+    public double getJumpVelocity() {
+        return jumpVelocity;
+    }
+
+    public void setJumpVelocity(double jumpVelocity) {
+        this.jumpVelocity = jumpVelocity;
+    }
+
+    public double getStopSpeed() {
+        return stopSpeed;
+    }
+
+    public void setStopSpeed(double stopSpeed) {
+        this.stopSpeed = stopSpeed;
+    }
+
+    public double getSurfaceFriction() {
+        return surfaceFriction;
+    }
+
+    public void setSurfaceFriction(double surfaceFriction) {
+        this.surfaceFriction = surfaceFriction;
+    }
+
+    public boolean isShowSpeedHud() {
+        return showSpeedHud;
+    }
+
+    public void setShowSpeedHud(boolean showSpeedHud) {
+        this.showSpeedHud = showSpeedHud;
+    }
+
+    public boolean isShowMaxSpeed() {
+        return showMaxSpeed;
+    }
+
+    public void setShowMaxSpeed(boolean showMaxSpeed) {
+        this.showMaxSpeed = showMaxSpeed;
+    }
+
+    public int getHudX() {
+        return hudX;
+    }
+
+    public void setHudX(int hudX) {
+        this.hudX = hudX;
+    }
+
+    public int getHudY() {
+        return hudY;
+    }
+
+    public void setHudY(int hudY) {
+        this.hudY = hudY;
+    }
+
+    public String getVersion() {
+        return "26.1.2";
+    }
+
+    public static MomentumConfig load() {
+        if (Files.exists(CONFIG_PATH)) {
+            try {
+                String json = Files.readString(CONFIG_PATH);
+                return GSON.fromJson(json, MomentumConfig.class);
+            } catch (IOException e) {
+                Momentum.LOGGER.error("Failed to load config", e);
+            }
+        }
+        return new MomentumConfig();
+    }
+
+    public void save() {
+        try {
+            String json = GSON.toJson(this);
+            Files.writeString(CONFIG_PATH, json);
+        } catch (IOException e) {
+            Momentum.LOGGER.error("Failed to save config", e);
+        }
+    }
+}

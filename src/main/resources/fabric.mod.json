@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "momentum",
+  "version": "${version}",
+  "name": "Momentum",
+  "description": "Source engine style bunny hopping physics for Minecraft",
+  "authors": [
+    "Momentum Contributors"
+  ],
+  "contact": {
+    "homepage": "https://github.com/thomass/Momentum",
+    "sources": "https://github.com/thomass/Momentum",
+    "issues": "https://github.com/thomass/Momentum/issues"
+  },
+  "license": "Apache-2.0",
+  "icon": "assets/momentum/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.momentum.Momentum"
+    ],
+    "client": [
+      "com.momentum.MomentumClient"
+    ],
+    "modmenu": [
+      "com.momentum.config.MomentumModMenu"
+    ]
+  },
+  "mixins": [
+    "momentum.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.18.0",
+    "minecraft": ">=26.1.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "minecraft": "26.1.2 || 26.2"
+  }
+}
