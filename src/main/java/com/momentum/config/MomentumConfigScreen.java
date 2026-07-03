@@ -2,6 +2,7 @@ package com.momentum.config;
 
 import com.momentum.Momentum;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
@@ -63,15 +64,25 @@ public class MomentumConfigScreen extends Screen {
         int col2X = cx + colGap / 2;
         int physStartY = 68;
 
-        addCycle(col1X, physStartY, colW, "Air Speed Cap", () -> airSpeedCap,
-            "Maximum horizontal speed while airborne (blocks/sec)",
-            new double[]{6, 8, 10, 12, 14, 16, 18, 20}, v -> airSpeedCap = v);
+        this.addRenderableWidget(new AbstractSliderButton(col1X, physStartY, colW, 20,
+                Component.literal("Air Speed Cap: " + String.format("%.0f", airSpeedCap)),
+                (airSpeedCap - 10) / 90.0) {
+            @Override
+            protected void updateMessage() {
+                double val = Math.round(10 + this.value * 90);
+                this.setMessage(Component.literal("Air Speed Cap: " + String.format("%.0f", val)));
+            }
+            @Override
+            protected void applyValue() {
+                airSpeedCap = Math.round(10 + this.value * 90);
+            }
+        });
         addCycle(col1X, physStartY + rh, colW, "Air Accel", () -> airAcceleration,
             "Acceleration rate while in the air",
             new double[]{1, 2, 3, 4, 5, 6, 8, 10}, v -> airAcceleration = v);
         addCycle(col1X, physStartY + rh * 2, colW, "Ground Speed", () -> groundSpeedCap,
             "Maximum speed while on the ground (blocks/sec)",
-            new double[]{2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10},
+            new double[]{2, 2.5, 3, 3.5, 4, 4.3, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5, 10},
             v -> groundSpeedCap = v);
         addCycle(col1X, physStartY + rh * 3, colW, "Ground Accel", () -> groundAcceleration,
             "Acceleration rate while on the ground",
@@ -99,17 +110,17 @@ public class MomentumConfigScreen extends Screen {
 
         this.addRenderableWidget(
             Button.builder(Component.literal("Reset to Defaults"), button -> {
-                MomentumConfig defaults = new MomentumConfig();
-                enabled = defaults.isEnabled();
-                autoBhop = defaults.isAutoBhop();
-                airSpeedCap = defaults.getAirSpeedCap();
-                airAcceleration = defaults.getAirAcceleration();
-                groundSpeedCap = defaults.getGroundSpeedCap();
-                groundAcceleration = defaults.getGroundAcceleration();
-                friction = defaults.getFriction();
-                gravity = defaults.getGravity();
-                jumpVelocity = defaults.getJumpVelocity();
-                stopSpeed = defaults.getStopSpeed();
+                MomentumConfig defaults = MomentumConfig.loadDefaults();
+                config.setEnabled(defaults.isEnabled());
+                config.setAutoBhop(defaults.isAutoBhop());
+                config.setAirSpeedCap(defaults.getAirSpeedCap());
+                config.setAirAcceleration(defaults.getAirAcceleration());
+                config.setGroundSpeedCap(defaults.getGroundSpeedCap());
+                config.setGroundAcceleration(defaults.getGroundAcceleration());
+                config.setFriction(defaults.getFriction());
+                config.setGravity(defaults.getGravity());
+                config.setJumpVelocity(defaults.getJumpVelocity());
+                config.setStopSpeed(defaults.getStopSpeed());
                 this.rebuildWidgets();
             }).tooltip(Tooltip.create(Component.literal("Resets all settings to their default values")))
                 .bounds(cx - 155, bottomY, 145, 20).build()

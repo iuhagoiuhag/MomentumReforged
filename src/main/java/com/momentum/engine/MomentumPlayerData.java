@@ -1,45 +1,59 @@
 package com.momentum.engine;
 
+import net.minecraft.world.entity.player.Input;
 import net.minecraft.world.entity.player.Player;
 
 public class MomentumPlayerData {
     private final Player player;
-    private final BhopEngine bhopEngine;
+    private Input lastInput;
     private double bestSpeed;
-    private boolean isBhopActive;
+    private boolean wasOnGround;
+    private boolean wasJumping;
 
     public MomentumPlayerData(Player player) {
         this.player = player;
-        this.bhopEngine = new BhopEngine(player);
+        this.lastInput = null;
         this.bestSpeed = 0;
-        this.isBhopActive = false;
+        this.wasOnGround = false;
+        this.wasJumping = false;
     }
 
-    public void tick() {
-        double currentSpeed = bhopEngine.getCurrentHorizontalSpeed();
-        if (currentSpeed > bestSpeed) {
-            bestSpeed = currentSpeed;
-        }
+    public void setLastInput(Input input) {
+        this.lastInput = input;
     }
 
-    public BhopEngine getBhopEngine() {
-        return bhopEngine;
+    public Input getLastInput() {
+        return lastInput;
+    }
+
+    public void setWasOnGround(boolean onGround) {
+        this.wasOnGround = onGround;
+    }
+
+    public boolean isFullGrounded() {
+        return wasOnGround && player.onGround();
+    }
+
+    public boolean wasJumping() {
+        return wasJumping;
+    }
+
+    public void setWasJumping(boolean wasJumping) {
+        this.wasJumping = wasJumping;
+    }
+
+    public double getCurrentHorizontalSpeed() {
+        var vel = player.getDeltaMovement();
+        return Math.sqrt(vel.x * vel.x + vel.z * vel.z);
     }
 
     public double getBestSpeed() {
+        double current = getCurrentHorizontalSpeed();
+        if (current > bestSpeed) bestSpeed = current;
         return bestSpeed;
-    }
-
-    public void setBhopActive(boolean active) {
-        this.isBhopActive = active;
-    }
-
-    public boolean isBhopActive() {
-        return isBhopActive;
     }
 
     public void resetStats() {
         this.bestSpeed = 0;
-        this.bhopEngine.resetMaxSpeed();
     }
 }

@@ -1,0 +1,15 @@
+{
+  "enabled": true,
+  "bhopEnabled": true,
+  "autoBhop": true,
+  "groundSpeedCap": 4.3,
+  "airSpeedCap": 20.0,
+  "airAcceleration": 3.0,
+  "groundAcceleration": 8.0,
+  "friction": 4.0,
+  "gravity": 32.0,
+  "jumpVelocity": 8.4,
+  "stopSpeed": 1.0,
+  "hudX": 10,
+  "hudY": 10
+}

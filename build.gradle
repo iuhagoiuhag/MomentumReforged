@@ -45,6 +45,10 @@ java {
     withSourcesJar()
 }
 
+tasks.withType(AbstractArchiveTask).configureEach {
+    archiveVersion = ''
+}
+
 jar {
     from("LICENSE") {
         rename { "${it}_${project.base.archivesName.get()}" }

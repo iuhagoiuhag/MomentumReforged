@@ -16,10 +16,10 @@ public class MomentumConfig {
 
     private boolean enabled = true;
     private boolean bhopEnabled = true;
-    private boolean autoBhop = false;
+    private boolean autoBhop = true;
 
-    private double groundSpeedCap = 5.5;
-    private double airSpeedCap = 12.0;
+    private double groundSpeedCap = 4.3;
+    private double airSpeedCap = 20.0;
     private double airAcceleration = 3.0;
     private double groundAcceleration = 8.0;
     private double friction = 4.0;
@@ -137,6 +137,20 @@ public class MomentumConfig {
         return "26.1.2";
     }
 
+    public static MomentumConfig loadDefaults() {
+        try {
+            var stream = MomentumConfig.class.getClassLoader()
+                .getResourceAsStream("defaultconfig.json");
+            if (stream != null) {
+                String json = new String(stream.readAllBytes());
+                return GSON.fromJson(json, MomentumConfig.class);
+            }
+        } catch (IOException e) {
+            Momentum.LOGGER.error("Failed to load default config", e);
+        }
+        return new MomentumConfig();
+    }
+
     public static MomentumConfig load() {
         if (Files.exists(CONFIG_PATH)) {
             try {
@@ -146,7 +160,7 @@ public class MomentumConfig {
                 Momentum.LOGGER.error("Failed to load config", e);
             }
         }
-        return new MomentumConfig();
+        return loadDefaults();
     }
 
     public void save() {
