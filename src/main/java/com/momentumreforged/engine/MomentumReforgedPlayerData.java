@@ -1,16 +1,16 @@
-package com.momentum.engine;
+package com.momentumreforged.engine;
 
 import net.minecraft.world.entity.player.Input;
 import net.minecraft.world.entity.player.Player;
 
-public class MomentumPlayerData {
+public class MomentumReforgedPlayerData {
     private final Player player;
     private Input lastInput;
     private double bestSpeed;
     private boolean wasOnGround;
     private boolean wasJumping;
 
-    public MomentumPlayerData(Player player) {
+    public MomentumReforgedPlayerData(Player player) {
         this.player = player;
         this.lastInput = null;
         this.bestSpeed = 0;

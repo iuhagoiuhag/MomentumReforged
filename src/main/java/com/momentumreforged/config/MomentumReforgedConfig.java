@@ -1,18 +1,18 @@
-package com.momentum.config;
+package com.momentumreforged.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.momentum.Momentum;
+import com.momentumreforged.MomentumReforged;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class MomentumConfig {
+public class MomentumReforgedConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final Path CONFIG_PATH = FabricLoader.getInstance()
-            .getConfigDir().resolve("momentum.json");
+            .getConfigDir().resolve("momentumreforged.json");
 
     private boolean enabled = true;
     private boolean bhopEnabled = true;
@@ -137,27 +137,27 @@ public class MomentumConfig {
         return "26.1.2";
     }
 
-    public static MomentumConfig loadDefaults() {
+    public static MomentumReforgedConfig loadDefaults() {
         try {
-            var stream = MomentumConfig.class.getClassLoader()
+            var stream = MomentumReforgedConfig.class.getClassLoader()
                 .getResourceAsStream("defaultconfig.json");
             if (stream != null) {
                 String json = new String(stream.readAllBytes());
-                return GSON.fromJson(json, MomentumConfig.class);
+                return GSON.fromJson(json, MomentumReforgedConfig.class);
             }
         } catch (IOException e) {
-            Momentum.LOGGER.error("Failed to load default config", e);
+            MomentumReforged.LOGGER.error("Failed to load default config", e);
         }
-        return new MomentumConfig();
+        return new MomentumReforgedConfig();
     }
 
-    public static MomentumConfig load() {
+    public static MomentumReforgedConfig load() {
         if (Files.exists(CONFIG_PATH)) {
             try {
                 String json = Files.readString(CONFIG_PATH);
-                return GSON.fromJson(json, MomentumConfig.class);
+                return GSON.fromJson(json, MomentumReforgedConfig.class);
             } catch (IOException e) {
-                Momentum.LOGGER.error("Failed to load config", e);
+                MomentumReforged.LOGGER.error("Failed to load config", e);
             }
         }
         return loadDefaults();
@@ -168,7 +168,7 @@ public class MomentumConfig {
             String json = GSON.toJson(this);
             Files.writeString(CONFIG_PATH, json);
         } catch (IOException e) {
-            Momentum.LOGGER.error("Failed to save config", e);
+            MomentumReforged.LOGGER.error("Failed to save config", e);
         }
     }
 }

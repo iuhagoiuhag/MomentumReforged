@@ -1,8 +1,8 @@
-package com.momentum.mixin;
+package com.momentumreforged.mixin;
 
-import com.momentum.Momentum;
-import com.momentum.config.MomentumConfig;
-import com.momentum.engine.MomentumPlayerData;
+import com.momentumreforged.MomentumReforged;
+import com.momentumreforged.config.MomentumReforgedConfig;
+import com.momentumreforged.engine.MomentumReforgedPlayerData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Input;
@@ -23,7 +23,7 @@ public class LivingEntityMixin {
     @Shadow
     private boolean jumping;
 
-    private boolean momentum$wasJumping;
+    private boolean momentumreforged$wasJumping;
 
     @Inject(method = "travel", at = @At("HEAD"), cancellable = true)
     private void onTravel(Vec3 travelVector, CallbackInfo ci) {
@@ -35,7 +35,7 @@ public class LivingEntityMixin {
         if (player.isInWater() || player.isInLava()) return;
         if (player.onClimbable()) return;
 
-        MomentumConfig config = Momentum.getConfig();
+        MomentumReforgedConfig config = MomentumReforged.getConfig();
         if (!config.isEnabled()) return;
 
         float forward;
@@ -43,7 +43,7 @@ public class LivingEntityMixin {
         boolean jump;
 
         if (player instanceof ServerPlayer serverPlayer) {
-            MomentumPlayerData data = Momentum.getPlayerData(serverPlayer);
+            MomentumReforgedPlayerData data = MomentumReforged.getPlayerData(serverPlayer);
             Input input = data.getLastInput();
             if (input != null) {
                 forward = (input.forward() ? 1f : 0f) - (input.backward() ? 1f : 0f);
@@ -66,7 +66,7 @@ public class LivingEntityMixin {
         boolean fullGrounded = onGround;
 
         if (player instanceof ServerPlayer serverPlayer) {
-            MomentumPlayerData data = Momentum.getPlayerData(serverPlayer);
+            MomentumReforgedPlayerData data = MomentumReforged.getPlayerData(serverPlayer);
             fullGrounded = data.isFullGrounded();
             data.setWasOnGround(onGround);
         }
@@ -91,12 +91,12 @@ public class LivingEntityMixin {
         } else {
             boolean jumpPressed;
             if (player instanceof ServerPlayer serverPlayer) {
-                MomentumPlayerData data = Momentum.getPlayerData(serverPlayer);
+                MomentumReforgedPlayerData data = MomentumReforged.getPlayerData(serverPlayer);
                 jumpPressed = !data.wasJumping();
                 data.setWasJumping(jump);
             } else {
-                jumpPressed = !momentum$wasJumping;
-                momentum$wasJumping = jump;
+                jumpPressed = !momentumreforged$wasJumping;
+                momentumreforged$wasJumping = jump;
             }
             if (jumpPressed && jump && onGround) {
                 Vec3 current = player.getDeltaMovement();
@@ -110,7 +110,7 @@ public class LivingEntityMixin {
     @Inject(method = "jumpFromGround", at = @At("HEAD"), cancellable = true)
     private void onJump(CallbackInfo ci) {
         if (!(((Object) this) instanceof Player player)) return;
-        MomentumConfig config = Momentum.getConfig();
+        MomentumReforgedConfig config = MomentumReforged.getConfig();
         if (!config.isEnabled()) return;
         if (player.isPassenger() || player.isSpectator()) return;
         if (player.getAbilities().flying) return;
@@ -124,7 +124,7 @@ public class LivingEntityMixin {
                              LivingEntity player, boolean fullGrounded, float yRot) {
         double speed = Math.sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
 
-        MomentumConfig config = Momentum.getConfig();
+        MomentumReforgedConfig config = MomentumReforged.getConfig();
 
         if (fullGrounded && speed > 0) {
             float slipperiness = 0.6f;
@@ -160,7 +160,7 @@ public class LivingEntityMixin {
         Vec3 wishDir = getWishDir(forward, strafe, yRot);
         if (wishDir == null) return velocity;
 
-        MomentumConfig config = Momentum.getConfig();
+        MomentumReforgedConfig config = MomentumReforged.getConfig();
         double maxAirSpeed = config.getAirSpeedCap() / 20.0;
 
         double baseWish = maxAirSpeed * 0.1;

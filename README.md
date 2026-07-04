@@ -1,4 +1,4 @@
-# Momentum
+# MomentumReforged
 
 Source engine style bunny hopping mod for Minecraft (Fabric).
 
@@ -12,12 +12,12 @@ Source engine style bunny hopping mod for Minecraft (Fabric).
 ## Installation
 
 1. Install Fabric Loader for Minecraft 26.1.2+
-2. Download the latest Momentum jar
+2. Download the latest MomentumReforged jar
 3. Place in your `mods` folder
 
 ## Configuration
 
-Edit `config/momentum.json` to customize:
+Edit `config/momentumreforged.json` to customize:
 
 - `enabled` - Master toggle
 - `bhopEnabled` - Enable bhop mechanics

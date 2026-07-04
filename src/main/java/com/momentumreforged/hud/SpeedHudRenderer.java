@@ -1,7 +1,7 @@
-package com.momentum.hud;
+package com.momentumreforged.hud;
 
-import com.momentum.Momentum;
-import com.momentum.config.MomentumConfig;
+import com.momentumreforged.MomentumReforged;
+import com.momentumreforged.config.MomentumReforgedConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.player.LocalPlayer;
@@ -10,7 +10,7 @@ public class SpeedHudRenderer {
     private static final Minecraft client = Minecraft.getInstance();
 
     public static void render(GuiGraphicsExtractor graphics) {
-        MomentumConfig config = Momentum.getConfig();
+        MomentumReforgedConfig config = MomentumReforged.getConfig();
 
         LocalPlayer player = client.player;
         if (player == null) return;

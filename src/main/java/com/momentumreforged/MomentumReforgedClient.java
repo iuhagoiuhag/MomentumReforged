@@ -1,22 +1,22 @@
-package com.momentum;
+package com.momentumreforged;
 
-import com.momentum.hud.SpeedHudRenderer;
+import com.momentumreforged.hud.SpeedHudRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.resources.Identifier;
 
-public class MomentumClient implements ClientModInitializer {
+public class MomentumReforgedClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
-        Momentum.LOGGER.info("Momentum client initializing...");
+        MomentumReforged.LOGGER.info("MomentumReforged client initializing...");
 
         HudElementRegistry.attachElementAfter(
             VanillaHudElements.HOTBAR,
-            Identifier.fromNamespaceAndPath(Momentum.MOD_ID, "speed"),
+            Identifier.fromNamespaceAndPath(MomentumReforged.MOD_ID, "speed"),
             (graphics, tickCounter) -> SpeedHudRenderer.render(graphics)
         );
 
-        Momentum.LOGGER.info("Momentum client initialized");
+        MomentumReforged.LOGGER.info("MomentumReforged client initialized");
     }
 }

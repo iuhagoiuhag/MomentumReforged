@@ -1,6 +1,6 @@
-package com.momentum.config;
+package com.momentumreforged.config;
 
-import com.momentum.Momentum;
+import com.momentumreforged.MomentumReforged;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.Button;
@@ -8,9 +8,9 @@ import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
-public class MomentumConfigScreen extends Screen {
+public class MomentumReforgedConfigScreen extends Screen {
     private final Screen parent;
-    private final MomentumConfig config;
+    private final MomentumReforgedConfig config;
 
     private boolean enabled;
     private boolean autoBhop;
@@ -23,10 +23,10 @@ public class MomentumConfigScreen extends Screen {
     private double jumpVelocity;
     private double stopSpeed;
 
-    public MomentumConfigScreen(Screen parent) {
-        super(Component.literal("Momentum Settings"));
+    public MomentumReforgedConfigScreen(Screen parent) {
+        super(Component.literal("MomentumReforged Settings"));
         this.parent = parent;
-        this.config = Momentum.getConfig();
+        this.config = MomentumReforged.getConfig();
     }
 
     @Override
@@ -53,7 +53,7 @@ public class MomentumConfigScreen extends Screen {
         int toggleStartX = cx - totalToggleW / 2;
 
         addToggle(toggleStartX, toggleY, toggleW, "Enabled", () -> enabled,
-            "Toggles all Momentum physics on/off", v -> enabled = v);
+            "Toggles all MomentumReforged physics on/off", v -> enabled = v);
         addToggle(toggleStartX + toggleW + gap, toggleY, toggleW, "Auto-Bhop", () -> autoBhop,
             "Automatically re-jumps when holding space", v -> autoBhop = v);
 
@@ -110,7 +110,7 @@ public class MomentumConfigScreen extends Screen {
 
         this.addRenderableWidget(
             Button.builder(Component.literal("Reset to Defaults"), button -> {
-                MomentumConfig defaults = MomentumConfig.loadDefaults();
+                MomentumReforgedConfig defaults = MomentumReforgedConfig.loadDefaults();
                 config.setEnabled(defaults.isEnabled());
                 config.setAutoBhop(defaults.isAutoBhop());
                 config.setAirSpeedCap(defaults.getAirSpeedCap());
@@ -184,7 +184,7 @@ public class MomentumConfigScreen extends Screen {
         config.setJumpVelocity(jumpVelocity);
         config.setStopSpeed(stopSpeed);
         config.save();
-        Momentum.LOGGER.info("Momentum config saved");
+        MomentumReforged.LOGGER.info("MomentumReforged config saved");
     }
 
     @Override

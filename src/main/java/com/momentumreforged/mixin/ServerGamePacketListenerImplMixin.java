@@ -1,8 +1,8 @@
-package com.momentum.mixin;
+package com.momentumreforged.mixin;
 
-import com.momentum.Momentum;
-import com.momentum.config.MomentumConfig;
-import com.momentum.engine.MomentumPlayerData;
+import com.momentumreforged.MomentumReforged;
+import com.momentumreforged.config.MomentumReforgedConfig;
+import com.momentumreforged.engine.MomentumReforgedPlayerData;
 import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
@@ -22,11 +22,11 @@ public abstract class ServerGamePacketListenerImplMixin {
     @Inject(method = "handlePlayerInput", at = @At("TAIL"))
     private void onHandlePlayerInput(ServerboundPlayerInputPacket packet, CallbackInfo ci) {
         ServerPlayer player = getPlayer();
-        MomentumConfig config = Momentum.getConfig();
+        MomentumReforgedConfig config = MomentumReforged.getConfig();
         if (!config.isEnabled() || !config.isBhopEnabled()) return;
 
         Input input = packet.input();
-        MomentumPlayerData data = Momentum.getPlayerData(player);
+        MomentumReforgedPlayerData data = MomentumReforged.getPlayerData(player);
         data.setLastInput(input);
 
         float forward = 0;
