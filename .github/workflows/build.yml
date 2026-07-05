@@ -85,7 +85,7 @@ jobs:
           )
 
           curl -X POST "https://api.modrinth.com/v2/version" \
-            -H "Authorization: ${MODRINTH_TOKEN}" \
+            -H "Authorization: Bearer ${MODRINTH_TOKEN}" \
             -H "User-Agent: iuhagoiuhag/MomentumReforged/1.0" \
             -F "data=${DATA}" \
             -F "${JAR_NAME}=@${JAR}"
