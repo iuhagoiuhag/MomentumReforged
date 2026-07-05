@@ -66,12 +66,10 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           JAR="build/libs/momentumreforged-${VERSION}.jar"
+          JAR_NAME="momentumreforged-${VERSION}.jar"
 
-          # Extract game versions and loaders from gradle.properties
           MC_VERSION=$(grep '^minecraft_version=' gradle.properties | cut -d'=' -f2)
-          LOADER_VERSION=$(grep '^loader_version=' gradle.properties | cut -d'=' -f2)
 
-          # Build the JSON payload
           DATA=$(cat <<EOF
           {
             "name": "v${VERSION}",
@@ -80,7 +78,7 @@ jobs:
             "game_versions": ["${MC_VERSION}"],
             "loaders": ["fabric"],
             "project_id": "IeYja5pu",
-            "file_parts": ["${JAR}"]
+            "file_parts": ["${JAR_NAME}"]
           }
           EOF
           )
@@ -88,7 +86,7 @@ jobs:
           curl -X POST "https://api.modrinth.com/v2/project/IeYja5pu/version" \
             -H "Authorization: ${MODRINTH_TOKEN}" \
             -F "data=${DATA}" \
-            -F "${JAR}=@${JAR}"
+            -F "${JAR_NAME}=@${JAR}"
 
       - name: Bump patch version
         if: steps.tag.outputs.exists == 'false'
