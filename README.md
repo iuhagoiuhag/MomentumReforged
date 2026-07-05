@@ -10,7 +10,7 @@ Source engine style bunny hopping mod for Minecraft (Fabric).
 
 ## Installation
 
-1. Install Fabric Loader for Minecraft 26.1.2+
+1. Install Fabric Loader for Minecraft 26.2 or 26.1.2
 2. Download the latest MomentumReforged jar
 3. Place in your `mods` folder
 

@@ -38,14 +38,27 @@ jobs:
             echo "exists=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Build
-        run: ./gradlew build
+      - name: Build for MC 26.2
+        run: ./gradlew build -Pminecraft_version=26.2 -Pfabric_version=0.154.0+26.2 -Pmodmenu_version=20.0.0-beta.2
+
+      - name: Rename 26.2 JAR
+        run: |
+          cp build/libs/momentumreforged-*.jar "build/libs/momentumreforged-${{ steps.version.outputs.version }}-mc26.2.jar"
+
+      - name: Build for MC 26.1.2
+        run: ./gradlew clean build -Pminecraft_version=26.1.2 -Pfabric_version=0.151.0+26.1.2 -Pmodmenu_version=20.0.0-beta.2
+
+      - name: Rename 26.1.2 JAR
+        run: |
+          cp build/libs/momentumreforged-*.jar "build/libs/momentumreforged-${{ steps.version.outputs.version }}-mc26.1.2.jar"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: MomentumReforged-${{ steps.version.outputs.version }}
-          path: build/libs/momentumreforged-${{ steps.version.outputs.version }}.jar
+          path: |
+            build/libs/momentumreforged-${{ steps.version.outputs.version }}-mc26.2.jar
+            build/libs/momentumreforged-${{ steps.version.outputs.version }}-mc26.1.2.jar
 
       - name: Create release
         if: steps.tag.outputs.exists == 'false'
@@ -57,30 +70,59 @@ jobs:
           gh release create "v${{ steps.version.outputs.version }}" \
             --title "v${{ steps.version.outputs.version }}" \
             --generate-notes \
-            "build/libs/momentumreforged-${{ steps.version.outputs.version }}.jar"
+            "build/libs/momentumreforged-${{ steps.version.outputs.version }}-mc26.2.jar" \
+            "build/libs/momentumreforged-${{ steps.version.outputs.version }}-mc26.1.2.jar"
 
-      - name: Upload to Modrinth
+      - name: Upload to Modrinth (26.2)
         if: steps.tag.outputs.exists == 'false'
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_PAT }}
         run: |
           VERSION="${{ steps.version.outputs.version }}"
-          JAR="build/libs/momentumreforged-${VERSION}.jar"
-          JAR_NAME="momentumreforged-${VERSION}.jar"
-
-          MC_VERSION=$(grep '^minecraft_version=' gradle.properties | cut -d'=' -f2)
+          JAR="build/libs/momentumreforged-${VERSION}-mc26.2.jar"
+          JAR_NAME="momentumreforged-${VERSION}-mc26.2.jar"
 
           DATA=$(cat <<EOF
           {
-            "name": "v${VERSION}",
-            "version_number": "${VERSION}",
+            "name": "v${VERSION} (MC 26.2)",
+            "version_number": "${VERSION}+mc26.2",
             "version_type": "release",
-            "game_versions": ["${MC_VERSION}"],
+            "game_versions": ["26.2"],
             "loaders": ["fabric"],
             "project_id": "IeYja5pu",
             "file_parts": ["${JAR_NAME}"],
             "dependencies": [],
-            "featured": false
+            "featured": true
+          }
+          EOF
+          )
+
+          curl -X POST "https://api.modrinth.com/v2/version" \
+            -H "Authorization: Bearer ${MODRINTH_TOKEN}" \
+            -H "User-Agent: iuhagoiuhag/MomentumReforged/1.0" \
+            -F "data=${DATA}" \
+            -F "${JAR_NAME}=@${JAR}"
+
+      - name: Upload to Modrinth (26.1.2)
+        if: steps.tag.outputs.exists == 'false'
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_PAT }}
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          JAR="build/libs/momentumreforged-${VERSION}-mc26.1.2.jar"
+          JAR_NAME="momentumreforged-${VERSION}-mc26.1.2.jar"
+
+          DATA=$(cat <<EOF
+          {
+            "name": "v${VERSION} (MC 26.1.2)",
+            "version_number": "${VERSION}+mc26.1.2",
+            "version_type": "release",
+            "game_versions": ["26.1.2"],
+            "loaders": ["fabric"],
+            "project_id": "IeYja5pu",
+            "file_parts": ["${JAR_NAME}"],
+            "dependencies": [],
+            "featured": true
           }
           EOF
           )

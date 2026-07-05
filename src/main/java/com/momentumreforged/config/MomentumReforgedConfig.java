@@ -116,7 +116,9 @@ public class MomentumReforgedConfig {
     }
 
     public String getVersion() {
-        return "26.1.2";
+        return FabricLoader.getInstance().getModContainer("minecraft")
+                .map(c -> c.getMetadata().getVersion().getFriendlyString())
+                .orElse("unknown");
     }
 
     public static MomentumReforgedConfig loadDefaults() {
