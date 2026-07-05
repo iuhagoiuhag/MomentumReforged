@@ -26,8 +26,6 @@ public class MomentumReforgedConfig {
     private double gravity = 32.0;
     private double jumpVelocity = 8.4;
     private double stopSpeed = 1.0;
-    private int hudX = 10;
-    private int hudY = 10;
 
     public boolean isEnabled() {
         return enabled;
@@ -115,22 +113,6 @@ public class MomentumReforgedConfig {
 
     public void setStopSpeed(double stopSpeed) {
         this.stopSpeed = stopSpeed;
-    }
-
-    public int getHudX() {
-        return hudX;
-    }
-
-    public void setHudX(int hudX) {
-        this.hudX = hudX;
-    }
-
-    public int getHudY() {
-        return hudY;
-    }
-
-    public void setHudY(int hudY) {
-        this.hudY = hudY;
     }
 
     public String getVersion() {

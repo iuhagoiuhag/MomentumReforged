@@ -5,8 +5,7 @@ Source engine style bunny hopping mod for Minecraft (Fabric).
 ## Features
 
 - **Air Strafing**: Accelerate in the air while turning
-- **Bhop Physics**: Source-engine accurate movement mechanics  
-- **Speed HUD**: Real-time speed display with max speed tracking
+- **Bhop Physics**: Source-engine accurate movement mechanics
 - **Configurable**: All physics parameters adjustable
 
 ## Installation
@@ -23,7 +22,6 @@ Edit `config/momentumreforged.json` to customize:
 - `bhopEnabled` - Enable bhop mechanics
 - `airSpeedCap` - Maximum air strafe speed (default: 30.0)
 - `groundSpeedCap` - Ground speed limit (default: 4.4)
-- `showSpeedHud` - Show speed overlay
 
 ## Building
 
