@@ -129,7 +129,7 @@ public class MomentumReforgedConfigScreen extends Screen {
         this.addRenderableWidget(
             Button.builder(Component.literal("Save & Close"), button -> {
                 save();
-                this.minecraft.gui.setScreen(parent);
+                this.minecraft.setScreenAndShow(parent);
             }).tooltip(Tooltip.create(Component.literal("Saves changes and returns to the previous screen")))
                 .bounds(cx + 10, bottomY, 145, 20).build()
         );
@@ -197,6 +197,6 @@ public class MomentumReforgedConfigScreen extends Screen {
 
     @Override
     public void onClose() {
-        this.minecraft.gui.setScreen(parent);
+        this.minecraft.setScreenAndShow(parent);
     }
 }

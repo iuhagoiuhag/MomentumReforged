@@ -23,8 +23,8 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    implementation("com.terraformersmc:modmenu:20.0.0-beta.2") { transitive = false }
-    include("com.terraformersmc:modmenu:20.0.0-beta.2") { transitive = false }
+    implementation("com.terraformersmc:modmenu:${project.modmenu_version}") { transitive = false }
+    include("com.terraformersmc:modmenu:${project.modmenu_version}") { transitive = false }
 }
 
 processResources {
