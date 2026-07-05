@@ -9,6 +9,7 @@ public class MomentumReforgedPlayerData {
     private double bestSpeed;
     private boolean wasOnGround;
     private boolean wasJumping;
+    private boolean hasMod;
 
     public MomentumReforgedPlayerData(Player player) {
         this.player = player;
@@ -16,6 +17,15 @@ public class MomentumReforgedPlayerData {
         this.bestSpeed = 0;
         this.wasOnGround = false;
         this.wasJumping = false;
+        this.hasMod = false;
+    }
+
+    public boolean hasMod() {
+        return hasMod;
+    }
+
+    public void setHasMod(boolean hasMod) {
+        this.hasMod = hasMod;
     }
 
     public void setLastInput(Input input) {

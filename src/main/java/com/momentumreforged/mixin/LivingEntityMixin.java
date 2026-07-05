@@ -38,6 +38,11 @@ public class LivingEntityMixin {
         MomentumReforgedConfig config = MomentumReforged.getConfig();
         if (!config.isEnabled()) return;
 
+        if (player instanceof ServerPlayer serverPlayer) {
+            MomentumReforgedPlayerData data = MomentumReforged.getPlayerData(serverPlayer);
+            if (!data.hasMod()) return;
+        }
+
         float forward;
         float strafe;
         boolean jump;
@@ -117,6 +122,10 @@ public class LivingEntityMixin {
         if (player.isFallFlying()) return;
         if (player.isInWater() || player.isInLava()) return;
         if (player.onClimbable()) return;
+        if (player instanceof ServerPlayer serverPlayer) {
+            MomentumReforgedPlayerData data = MomentumReforged.getPlayerData(serverPlayer);
+            if (!data.hasMod()) return;
+        }
         ci.cancel();
     }
 
