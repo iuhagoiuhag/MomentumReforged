@@ -41,6 +41,8 @@ public class LivingEntityMixin {
         if (player instanceof ServerPlayer serverPlayer) {
             MomentumReforgedPlayerData data = MomentumReforged.getPlayerData(serverPlayer);
             if (!data.hasMod()) return;
+        } else if (!MomentumReforged.serverHasMod) {
+            return;
         }
 
         float forward;
@@ -125,6 +127,8 @@ public class LivingEntityMixin {
         if (player instanceof ServerPlayer serverPlayer) {
             MomentumReforgedPlayerData data = MomentumReforged.getPlayerData(serverPlayer);
             if (!data.hasMod()) return;
+        } else if (!MomentumReforged.serverHasMod) {
+            return;
         }
         ci.cancel();
     }
