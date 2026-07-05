@@ -79,7 +79,8 @@ jobs:
             "loaders": ["fabric"],
             "project_id": "IeYja5pu",
             "file_parts": ["${JAR_NAME}"],
-            "dependencies": []
+            "dependencies": [],
+            "featured": false
           }
           EOF
           )
