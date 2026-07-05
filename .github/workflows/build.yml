@@ -43,14 +43,14 @@ jobs:
 
       - name: Rename 26.2 JAR
         run: |
-          cp build/libs/momentumreforged-*.jar "build/libs/momentumreforged-${{ steps.version.outputs.version }}-mc26.2.jar"
+          cp "build/libs/momentumreforged-${{ steps.version.outputs.version }}.jar" "build/libs/momentumreforged-${{ steps.version.outputs.version }}-mc26.2.jar"
 
       - name: Build for MC 26.1.2
         run: ./gradlew clean build -Pminecraft_version=26.1.2 -Pfabric_version=0.151.0+26.1.2 -Pmodmenu_version=20.0.0-beta.2
 
       - name: Rename 26.1.2 JAR
         run: |
-          cp build/libs/momentumreforged-*.jar "build/libs/momentumreforged-${{ steps.version.outputs.version }}-mc26.1.2.jar"
+          cp "build/libs/momentumreforged-${{ steps.version.outputs.version }}.jar" "build/libs/momentumreforged-${{ steps.version.outputs.version }}-mc26.1.2.jar"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
