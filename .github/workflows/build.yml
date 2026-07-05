@@ -78,7 +78,8 @@ jobs:
             "game_versions": ["${MC_VERSION}"],
             "loaders": ["fabric"],
             "project_id": "IeYja5pu",
-            "file_parts": ["${JAR_NAME}"]
+            "file_parts": ["${JAR_NAME}"],
+            "dependencies": []
           }
           EOF
           )
