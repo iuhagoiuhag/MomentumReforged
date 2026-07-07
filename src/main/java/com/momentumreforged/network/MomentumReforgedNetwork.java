@@ -1,6 +1,7 @@
 package com.momentumreforged.network;
 
 import com.momentumreforged.MomentumReforged;
+import com.momentumreforged.MomentumReforgedClient;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -27,12 +28,12 @@ public final class MomentumReforgedNetwork {
 
     public static void registerClientHandlers() {
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
-            MomentumReforged.serverHasMod = false;
+            MomentumReforgedClient.serverHasMod = false;
         });
 
         ClientPlayNetworking.registerGlobalReceiver(HANDSHAKE_TYPE, (payload, context) -> {
             context.client().execute(() -> {
-                MomentumReforged.serverHasMod = true;
+                MomentumReforgedClient.serverHasMod = true;
                 ClientPlayNetworking.send(HandshakePayload.INSTANCE);
             });
         });

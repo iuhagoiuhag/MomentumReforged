@@ -1,6 +1,5 @@
 {
   "enabled": true,
-  "bhopEnabled": true,
   "autoBhop": true,
   "groundSpeedCap": 4.3,
   "airSpeedCap": 20.0,

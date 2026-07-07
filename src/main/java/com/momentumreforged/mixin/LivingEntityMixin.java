@@ -41,7 +41,9 @@ public class LivingEntityMixin {
         if (player instanceof ServerPlayer serverPlayer) {
             MomentumReforgedPlayerData data = MomentumReforged.getPlayerData(serverPlayer);
             if (!data.hasMod()) return;
-        } else if (!MomentumReforged.serverHasMod) {
+        } else if (net.fabricmc.loader.api.FabricLoader.getInstance().getEnvironmentType()
+                   == net.fabricmc.api.EnvType.CLIENT
+                   && !com.momentumreforged.MomentumReforgedClient.serverHasMod) {
             return;
         }
 
@@ -127,7 +129,9 @@ public class LivingEntityMixin {
         if (player instanceof ServerPlayer serverPlayer) {
             MomentumReforgedPlayerData data = MomentumReforged.getPlayerData(serverPlayer);
             if (!data.hasMod()) return;
-        } else if (!MomentumReforged.serverHasMod) {
+        } else if (net.fabricmc.loader.api.FabricLoader.getInstance().getEnvironmentType()
+                   == net.fabricmc.api.EnvType.CLIENT
+                   && !com.momentumreforged.MomentumReforgedClient.serverHasMod) {
             return;
         }
         ci.cancel();

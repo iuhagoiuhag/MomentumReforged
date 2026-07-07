@@ -15,7 +15,6 @@ public class MomentumReforgedConfig {
             .getConfigDir().resolve("momentumreforged.json");
 
     private boolean enabled = true;
-    private boolean bhopEnabled = true;
     private boolean autoBhop = true;
 
     private double groundSpeedCap = 4.3;
@@ -33,14 +32,6 @@ public class MomentumReforgedConfig {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public boolean isBhopEnabled() {
-        return bhopEnabled;
-    }
-
-    public void setBhopEnabled(boolean bhopEnabled) {
-        this.bhopEnabled = bhopEnabled;
     }
 
     public boolean isAutoBhop() {
@@ -116,7 +107,7 @@ public class MomentumReforgedConfig {
     }
 
     public String getVersion() {
-        return FabricLoader.getInstance().getModContainer("minecraft")
+        return FabricLoader.getInstance().getModContainer(MomentumReforged.MOD_ID)
                 .map(c -> c.getMetadata().getVersion().getFriendlyString())
                 .orElse("unknown");
     }

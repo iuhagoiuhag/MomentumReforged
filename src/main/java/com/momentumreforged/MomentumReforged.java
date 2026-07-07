@@ -20,7 +20,6 @@ public class MomentumReforged implements ModInitializer {
     public static final String MOD_ID = "momentumreforged";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
     public static MomentumReforgedConfig config;
-    public static boolean serverHasMod = false;
     private static final Map<UUID, MomentumReforgedPlayerData> playerDataMap = new ConcurrentHashMap<>();
 
     @Override

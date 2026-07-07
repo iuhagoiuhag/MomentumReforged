@@ -19,7 +19,6 @@ Source engine style bunny hopping mod for Minecraft (Fabric).
 Edit `config/momentumreforged.json` to customize:
 
 - `enabled` - Master toggle
-- `bhopEnabled` - Enable bhop mechanics
 - `airSpeedCap` - Maximum air strafe speed (default: 30.0)
 - `groundSpeedCap` - Ground speed limit (default: 4.4)
 

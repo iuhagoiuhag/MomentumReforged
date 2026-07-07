@@ -23,7 +23,7 @@ public abstract class ServerGamePacketListenerImplMixin {
     private void onHandlePlayerInput(ServerboundPlayerInputPacket packet, CallbackInfo ci) {
         ServerPlayer player = getPlayer();
         MomentumReforgedConfig config = MomentumReforged.getConfig();
-        if (!config.isEnabled() || !config.isBhopEnabled()) return;
+        if (!config.isEnabled()) return;
 
         Input input = packet.input();
         MomentumReforgedPlayerData data = MomentumReforged.getPlayerData(player);

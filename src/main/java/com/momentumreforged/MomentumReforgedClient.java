@@ -4,6 +4,8 @@ import com.momentumreforged.network.MomentumReforgedNetwork;
 import net.fabricmc.api.ClientModInitializer;
 
 public class MomentumReforgedClient implements ClientModInitializer {
+    public static boolean serverHasMod = false;
+
     @Override
     public void onInitializeClient() {
         MomentumReforged.LOGGER.info("MomentumReforged client initializing...");
