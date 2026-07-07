@@ -89,6 +89,25 @@ jobs:
             -F "data=${DATA}" \
             -F "${JAR_NAME}=@${JAR}"
 
+      - name: Upload to CurseForge
+        if: steps.tag.outputs.exists == 'false'
+        env:
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_PAT }}
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          JAR="build/libs/momentumreforged-${VERSION}.jar"
+
+          VERSIONS_JSON=$(curl -s "https://minecraft.curseforge.com/api/game/versions" \
+            -H "X-Api-Token: ${CURSEFORGE_TOKEN}")
+
+          V26_1_2=$(echo "$VERSIONS_JSON" | python3 -c "import sys,json; versions=json.load(sys.stdin); print(next(v['id'] for v in versions if v['name']=='26.1.2'))")
+          V26_2=$(echo "$VERSIONS_JSON" | python3 -c "import sys,json; versions=json.load(sys.stdin); print(next(v['id'] for v in versions if v['name']=='26.2'))")
+
+          curl -X POST "https://minecraft.curseforge.com/api/projects/1601318/upload-file" \
+            -H "X-Api-Token: ${CURSEFORGE_TOKEN}" \
+            -F "metadata={\"changelog\":\"Release v${VERSION}\",\"changelogType\":\"markdown\",\"gameVersions\":[${V26_1_2},${V26_2}],\"releaseType\":\"release\"}" \
+            -F "file=@${JAR}"
+
       - name: Bump patch version
         if: steps.tag.outputs.exists == 'false'
         env:
